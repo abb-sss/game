@@ -90,6 +90,118 @@ export async function checkAnimSpecs(
   return issues;
 }
 
+/** Phaser 3 废弃 / 不推荐 API 模式（借鉴 phaser4-gamedev validate） */
+export interface PhaserLintRule {
+  code: string;
+  pattern: RegExp;
+  message: string;
+  level: "error" | "warn";
+}
+
+export const PHASER_DEPRECATED_RULES: PhaserLintRule[] = [
+  {
+    code: "phaser_game_add",
+    pattern: /\bthis\.game\.add\./,
+    message: "使用 this.add.* 替代 this.game.add.*（Scene 快捷 API）",
+    level: "error",
+  },
+  {
+    code: "phaser_game_input",
+    pattern: /\bthis\.game\.input\b/,
+    message: "使用 this.input 替代 this.game.input",
+    level: "error",
+  },
+  {
+    code: "phaser_game_cameras",
+    pattern: /\bthis\.game\.cameras\b/,
+    message: "使用 this.cameras 替代 this.game.cameras",
+    level: "warn",
+  },
+  {
+    code: "phaser_game_scale",
+    pattern: /\bthis\.game\.scale\b/,
+    message: "使用 this.scale 替代 this.game.scale",
+    level: "warn",
+  },
+  {
+    code: "phaser_sprite_class",
+    pattern: /\bPhaser\.Sprite\b/,
+    message: "Phaser.Sprite 已移除，使用 Phaser.GameObjects.Sprite",
+    level: "error",
+  },
+  {
+    code: "phaser_tile_sprite_class",
+    pattern: /\bPhaser\.TileSprite\b/,
+    message: "使用 Phaser.GameObjects.TileSprite",
+    level: "error",
+  },
+  {
+    code: "phaser_loader_cross_origin",
+    pattern: /\.crossOrigin\s*=/,
+    message: "Loader crossOrigin 已变更，使用 setCORS / setCrossOrigin",
+    level: "warn",
+  },
+  {
+    code: "phaser_random_data_generator",
+    pattern: /\bPhaser\.RandomDataGenerator\b/,
+    message: "使用 Phaser.Math.RandomDataGenerator",
+    level: "warn",
+  },
+];
+
+async function collectSourceFiles(dir: string): Promise<string[]> {
+  const out: string[] = [];
+  let entries;
+  try {
+    entries = await fsp.readdir(dir, { withFileTypes: true });
+  } catch {
+    return out;
+  }
+
+  for (const ent of entries) {
+    const full = path.join(dir, ent.name);
+    if (ent.isDirectory() && ent.name !== "node_modules") {
+      out.push(...(await collectSourceFiles(full)));
+    } else if (ent.isFile() && /\.(ts|tsx|js|jsx)$/.test(ent.name)) {
+      out.push(full);
+    }
+  }
+  return out;
+}
+
+export async function checkPhaserDeprecatedApis(
+  projectRoot: string,
+): Promise<ValidateIssue[]> {
+  const srcDir = path.join(projectRoot, "src");
+  const files = await collectSourceFiles(srcDir);
+  if (!files.length) return [];
+
+  const issues: ValidateIssue[] = [];
+
+  for (const file of files) {
+    const content = await fsp.readFile(file, "utf-8");
+    const lines = content.split(/\r?\n/);
+    const rel = path.relative(projectRoot, file).replace(/\\/g, "/");
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      if (line.trimStart().startsWith("//")) continue;
+
+      for (const rule of PHASER_DEPRECATED_RULES) {
+        if (rule.pattern.test(line)) {
+          issues.push({
+            level: rule.level,
+            code: rule.code,
+            message: `${rel}:${i + 1} — ${rule.message}`,
+          });
+        }
+      }
+    }
+  }
+
+  return issues;
+}
+
 /** 设计文档存在性（建议项） */
 export async function checkDesignDocs(projectRoot: string): Promise<ValidateIssue[]> {
   const gdd = path.join(projectRoot, "design/GDD.md");

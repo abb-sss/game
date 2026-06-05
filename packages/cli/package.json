@@ -23,6 +23,7 @@
     "@aigf/core": "0.1.0",
     "@aigf/llm": "0.2.0",
     "@aigf/orchestrator": "0.1.0",
+    "@aigf/playtest": "0.1.0",
     "@aigf/agent-video": "0.1.0",
     "@aigf/review": "0.1.0",
     "yaml": "^2.8.0"

@@ -1,7 +1,9 @@
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   checkAssetPathNaming,
   checkGameSpecManifestRefs,
+  checkPhaserDeprecatedApis,
 } from "./validate-rules.js";
 import type { GameSpec } from "@aigf/core";
 
@@ -44,5 +46,14 @@ describe("validate-rules", () => {
     };
     const issues = checkGameSpecManifestRefs(spec, new Set(["other"]));
     expect(issues[0].code).toBe("skill_manifest_ref");
+  });
+});
+
+describe("checkPhaserDeprecatedApis", () => {
+  it("检测 this.game.add 废弃用法", async () => {
+    const issues = await checkPhaserDeprecatedApis(
+      path.join(process.cwd(), "../../templates/phaser-2d"),
+    );
+    expect(issues.some((i) => i.code === "phaser_game_add")).toBe(false);
   });
 });

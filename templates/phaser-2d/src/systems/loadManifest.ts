@@ -5,6 +5,7 @@ export interface AssetEntry {
   type: string;
   path: string;
   tags: string[];
+  meta?: Record<string, unknown>;
   placeholder?: boolean;
 }
 

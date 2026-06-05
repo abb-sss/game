@@ -23,11 +23,21 @@ const result = spawnSync(process.execPath, [cli, ...args], {
 process.exit(result.status ?? 1);
 `;
 
-const PRE_COMMIT_SHELL = `#!/bin/sh
-# AIGF pre-commit — 运行 aigf validate
-cd "$(git rev-parse --show-toplevel)" || exit 1
-node .aigf/hooks/run-validate.mjs
+function buildPreCommitHook(runnerPath: string): string {
+  return `#!/usr/bin/env node
+/**
+ * AIGF pre-commit — 跨平台调用 validate
+ * 由 aigf hooks install 生成，请勿手改
+ */
+import { spawnSync } from "node:child_process";
+
+const result = spawnSync(process.execPath, [${JSON.stringify(runnerPath)}], {
+  stdio: "inherit",
+});
+
+process.exit(result.status ?? 1);
 `;
+}
 
 export async function installHooks(projectRoot: string): Promise<void> {
   const resolved = path.resolve(projectRoot);
@@ -46,7 +56,9 @@ export async function installHooks(projectRoot: string): Promise<void> {
   await fsp.writeFile(runnerPath, RUN_VALIDATE_SCRIPT, "utf-8");
 
   const preCommitPath = path.join(gitDir, "hooks", "pre-commit");
-  await fsp.writeFile(preCommitPath, PRE_COMMIT_SHELL, { mode: 0o755 });
+  await fsp.writeFile(preCommitPath, buildPreCommitHook(runnerPath), {
+    mode: 0o755,
+  });
 
   console.log(`✅ 已安装 Git pre-commit 钩子`);
   console.log(`   ${preCommitPath}`);
@@ -60,7 +72,7 @@ export async function uninstallHooks(projectRoot: string): Promise<void> {
 
   try {
     const content = await fsp.readFile(preCommitPath, "utf-8");
-    if (!content.includes("AIGF pre-commit")) {
+    if (!content.includes("AIGF pre-commit") && !content.includes("aigf hooks install")) {
       console.log("⚠️  pre-commit 非 AIGF 安装，跳过卸载");
       return;
     }

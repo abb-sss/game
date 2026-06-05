@@ -18,6 +18,7 @@ export async function initDocs(projectRoot: string): Promise<void> {
     { template: "gdd-template.md", out: "GDD.md" },
     { template: "adr-template.md", out: "ADR-001-template.md" },
     { template: "sprint-plan-template.md", out: "sprint-plan.md" },
+    { template: "STATE-template.md", out: "STATE.md" },
   ];
 
   for (const { template, out } of files) {

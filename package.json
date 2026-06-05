@@ -1,6 +1,6 @@
 {
   "name": "aigf",
-  "version": "0.8.0",
+  "version": "0.10.0",
   "private": false,
   "description": "AIGF — 开源多 Agent 驱动 2D 游戏开发框架。Phaser 3 + TypeScript，含 AI 编排、生图/视频/音频/编程 Agent、验收回炉、Runway/Kling 资产管线与 CLI 工具链。",
   "license": "MIT",
@@ -35,8 +35,8 @@
     "templates/*"
   ],
   "scripts": {
-    "build": "npm run build -w @aigf/core && npm run build -w @aigf/llm && npm run build -w @aigf/providers && npm run build -w @aigf/pipeline && npm run build -w @aigf/orchestrator && npm run build -w @aigf/review && npm run build -w @aigf/agent-code && npm run build -w @aigf/agent-image && npm run build -w @aigf/agent-video && npm run build -w @aigf/agent-audio && npm run build -w @aigf/cli && npm run build -w @aigf/dashboard",
-    "test": "npm run test -w @aigf/core && npm run test -w @aigf/llm && npm run test -w @aigf/providers && npm run test -w @aigf/orchestrator && npm run test -w @aigf/review && npm run test -w @aigf/pipeline && npm run test -w @aigf/cli",
+    "build": "npm run build -w @aigf/core && npm run build -w @aigf/llm && npm run build -w @aigf/providers && npm run build -w @aigf/pipeline && npm run build -w @aigf/orchestrator && npm run build -w @aigf/playtest && npm run build -w @aigf/review && npm run build -w @aigf/agent-code && npm run build -w @aigf/agent-image && npm run build -w @aigf/agent-video && npm run build -w @aigf/agent-audio && npm run build -w @aigf/cli && npm run build -w @aigf/dashboard",
+    "test": "npm run test -w @aigf/core && npm run test -w @aigf/llm && npm run test -w @aigf/providers && npm run test -w @aigf/orchestrator && npm run test -w @aigf/playtest && npm run test -w @aigf/review && npm run test -w @aigf/pipeline && npm run test -w @aigf/cli",
     "run:demo:full": "npm run build && node packages/cli/dist/index.js run \"添加冰锥术技能动画\" --project ./templates/phaser-2d --dry-run",
     "lint": "npm run lint --workspaces --if-present",
     "validate": "npm run build && node packages/cli/dist/index.js validate",
@@ -44,7 +44,10 @@
     "setup:demo": "node templates/phaser-2d/scripts/generate-placeholders.mjs",
     "example": "npm run build && node examples/basic-flow.mjs",
     "run:demo": "npm run build && node packages/cli/dist/index.js run \"添加冰锥术\" --project ./templates/phaser-2d --dry-run",
-    "dashboard": "npm run build && node packages/cli/dist/index.js dashboard --project ./templates/phaser-2d"
+    "dashboard": "npm run build && node packages/cli/dist/index.js dashboard --project ./templates/phaser-2d",
+    "playtest": "npm run build && node packages/cli/dist/index.js playtest --project ./templates/phaser-2d",
+    "playtest:demo": "npm run playtest",
+    "deploy:demo": "npm run build && node packages/cli/dist/index.js deploy gh-pages --project ./templates/phaser-2d"
   },
   "engines": {
     "node": ">=20"

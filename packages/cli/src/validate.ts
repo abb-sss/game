@@ -14,6 +14,7 @@ import {
   checkAssetPathNaming,
   checkDesignDocs,
   checkGameSpecManifestRefs,
+  checkPhaserDeprecatedApis,
   type ValidateIssue,
 } from "./validate-rules.js";
 
@@ -111,6 +112,7 @@ export async function validateProject(
 
   extraIssues.push(...await checkAnimSpecs(projectRoot, manifestAssets));
   extraIssues.push(...await checkDesignDocs(projectRoot));
+  extraIssues.push(...await checkPhaserDeprecatedApis(projectRoot));
 
   for (const issue of extraIssues) {
     if (issue.level === "error") {

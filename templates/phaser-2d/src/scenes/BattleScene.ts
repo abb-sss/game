@@ -1,6 +1,7 @@
 import { IceSpikeSkill } from "../systems/skills/ice_spike";
 import Phaser from "phaser";
 import type { ISkill } from "../types/skill";
+import { installTestHarness } from "../test-harness";
 
 /** 火球术 — 演示技能实现 */
 class FireballSkill implements ISkill {
@@ -49,20 +50,27 @@ export class BattleScene extends Phaser.Scene {
     this.player.setScale(2);
 
     this.hintText = this.add
-      .text(16, 16, "AIGF Demo — 按 SPACE 释放实现
+      .text(16, 16, "AIGF Demo — 按 SPACE 释放冰锥术", {
         fontSize: "14px",
         color: "#ffc857",
       })
       .setDepth(10);
 
-    this.input.keyboard?.on("keydown-SPACE", () => {
-      if (this.skill.canCast()) {
-        this.skill.cast(this, this.player);
-        this.hintText.setText("实现！冷却 2 秒...");
-        this.time.delayedCall(2000, () => {
-          this.hintText.setText("AIGF Demo — 按 SPACE 释放火球术");
-        });
-      }
+    const castSkill = (): void => {
+      if (!this.skill.canCast()) return;
+      this.skill.cast(this, this.player);
+      this.hintText.setText("冰锥术！冷却 2 秒...");
+      this.time.delayedCall(2000, () => {
+        this.hintText.setText("AIGF Demo — 按 SPACE 释放冰锥术");
+      });
+    };
+
+    this.input.keyboard?.on("keydown-SPACE", castSkill);
+
+    installTestHarness(this, {
+      skill: this.skill,
+      hintText: this.hintText,
+      onCast: () => castSkill(),
     });
   }
 }

@@ -11,7 +11,7 @@
 
 不自研渲染引擎，专注 **AI 编排、资产管线与质量闭环**，支持 OpenAI / Runway / Kling / Replicate 等 API 自配。
 
-[![Version](https://img.shields.io/badge/version-0.8.0-ffc857?style=flat-square)](./package.json)
+[![Version](https://img.shields.io/badge/version-0.10.0-ffc857?style=flat-square)](./package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](./LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -25,6 +25,8 @@
 [架构说明](./docs/architecture.md) ·
 [Agent 编制](./docs/agent-roster.md) ·
 [Gitee 调研](./docs/gitee-landscape.md) ·
+[GitHub 调研](./docs/github-landscape.md) ·
+[AGENTS.md](./AGENTS.md) ·
 [贡献指南](./CONTRIBUTING.md)
 
 </div>
@@ -57,6 +59,11 @@
 | 🎬 | **资产管线** | 生图 → 视频 API → ffmpeg 抽帧 → 精灵表 → 代码注册 |
 | 👥 | **多人协作审批** | 认领 / 审计日志 / 看板实时 SSE |
 | 📋 | **GDD + Git 钩子** | 设计文档模板、`aigf hooks install` 提交前验证 |
+| 🎮 | **E2E 玩测** | `aigf playtest` 按 `game.spec.yaml` 验收技能与资产，输出报告 |
+| 🚀 | **一键部署** | `aigf deploy gh-pages` 构建并输出静态站 |
+| 🖥️ | **看板 Live Preview** | Dashboard 内嵌游戏预览（构建 + vite preview） |
+| 🔍 | **Phaser API lint** | `aigf validate` 检测废弃 API 用法 |
+| 📘 | **AI 协作规范** | 根目录 `AGENTS.md` + `design/STATE.md` 多会话续作 |
 | 🌐 | **开源友好** | MIT 许可，模型 API 自配，支持 OpenAI 兼容接口 |
 
 ---
@@ -117,6 +124,9 @@ npm run setup:demo
 # 校验项目完整性
 npm run validate
 
+# E2E 验收（自动安装 Chromium，按 game.spec 测技能/资产）
+npm run playtest
+
 # dry-run：无需 API Key，跑通 4 步 Agent 工作流
 npm run run:demo:full
 
@@ -168,9 +178,10 @@ aigf/
 │   ├── video/          # 视频 Agent
 │   └── audio/          # 音频 Agent
 ├── templates/
-│   ├── phaser-2d/      # Phaser 2D 可玩模板
-│   └── docs/           # GDD / ADR / 冲刺计划模板
-├── docs/               # 架构、Agent、调研文档
+│   ├── phaser-2d/      # Phaser 2D 可玩模板（含 e2e/ 玩测）
+│   └── docs/           # GDD / ADR / STATE 模板
+├── docs/               # 架构、Agent、Gitee/GitHub 调研
+├── AGENTS.md           # AI Agent 协作宪法
 ├── schemas/            # JSON Schema
 ├── prompts/            # Agent 系统提示词
 └── examples/           # 基础流程示例
@@ -223,7 +234,10 @@ aigf/
 | `aigf approve [task-id]` | 人工审批（retry / skip / abort） |
 | `aigf approve <id> --claim --reviewer 名` | 多人协作认领 |
 | `aigf dashboard` | 启动 SSE 任务看板 |
-| `aigf doc init` | 生成 `design/GDD.md` 等文档 |
+| `aigf doc init` | 生成 `design/GDD.md`、`STATE.md` 等 |
+| `aigf playtest` | E2E 验收（game.spec 驱动 → `.aigf/playtest-report.json`） |
+| `aigf deploy gh-pages` | 构建游戏并输出 `dist/gh-pages` |
+| `aigf deploy static` | 仅构建游戏 `dist/` |
 | `aigf hooks install` | Git pre-commit 自动 validate |
 
 ```bash
@@ -267,7 +281,8 @@ aigf status --project ./templates/phaser-2d
 | v0.6 | ✅ | Runway / Kling 直连 API |
 | v0.7 | ✅ | 多人协作审批、审计、`aigf status` |
 | v0.8 | ✅ | GDD 模板、增强 validate、Git 钩子 |
-| v0.9 | 🚧 | 玩测 Agent / E2E 自动试玩验收 |
+| v0.9 | ✅ | GitHub 竞品调研、AGENTS.md、Playwright 玩测、STATE.md |
+| v0.10 | ✅ | `aigf deploy`、看板 Live Preview、Phaser API lint |
 
 ---
 

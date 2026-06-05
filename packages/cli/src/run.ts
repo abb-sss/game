@@ -13,6 +13,7 @@ import { ReviewAgent } from "@aigf/review";
 import { isLlmAvailable } from "@aigf/llm";
 import { ensureManifestEntries, entriesFromTasks } from "@aigf/core";
 import { appendEvent } from "./events.js";
+import { runPlaytest } from "./playtest.js";
 
 export interface RunOptions {
   projectRoot: string;
@@ -149,6 +150,28 @@ export async function runWorkflow(options: RunOptions): Promise<void> {
     type: "run_complete",
     message: `完成 ${orchestrator.getAllTasks().length} 个任务`,
   });
+
+  const tasks = orchestrator.getAllTasks();
+  const hasCode = tasks.some((t) => t.type === "code");
+  const allMerged = tasks.every((t) =>
+    ["merged", "passed"].includes(t.status),
+  );
+
+  if (hasCode && allMerged && process.env.AIGF_PLAYTEST !== "0") {
+    console.log("\n🎮 工作流完成，运行 E2E 验收…");
+    const { ok, report } = await runPlaytest({ projectRoot });
+    await appendEvent(projectRoot, {
+      type: ok ? "playtest_passed" : "playtest_failed",
+      message: report
+        ? `${report.total - report.failed}/${report.total} 通过`
+        : "玩测未生成报告",
+    });
+    if (!ok) {
+      console.log(
+        "⚠️  Agent 任务已合并，但 E2E 未通过。修复后运行: aigf playtest",
+      );
+    }
+  }
 }
 
 async function writeRunState(

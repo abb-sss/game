@@ -13,3 +13,7 @@ pipeline/raw/
 .snapshots/
 .aigf/
 my-game/
+test-results/
+playwright-report/
+blob-report/
+dist/gh-pages/

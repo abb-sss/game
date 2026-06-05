@@ -46,6 +46,9 @@ pending → dispatched → submitted → reviewing
 3. **manifest id**：编排 Agent 预分配，各 Agent 只消费不发明
 4. **ReviewReport**：失败项含 `responsibleAgent` + `retryHint`
 5. **验收门禁**：`aigf validate` + Review Agent 双层检查
+6. **玩测门禁**（v0.9）：`aigf playtest` Playwright 冒烟（canvas 渲染 + 基础按键无异常）
+7. **部署与预览**（v0.10）：`aigf deploy` 静态站输出；看板 Live Preview 内嵌 vite preview
+8. **Phaser lint**（v0.10）：`aigf validate` 扫描 `src/` 废弃 API 模式
 
 ## 开源策略
 

@@ -57,10 +57,16 @@ Gitee 上**没有**与 AIGF 完全同定位的开源项目（Phaser 2D + 多 Age
 1. ~~**文档模板**~~：v0.8 已实现 `aigf doc init`
 2. ~~**Git 钩子**~~：v0.8 已实现 `aigf hooks install`
 3. **引擎扩展**：第二模板（Godot 4）作为可选 workspace
-4. **玩测 Agent**：对接 GameAISDK 或 Playwright 做自动化试玩验收
+4. ~~**玩测 Agent**~~：v0.9 已实现 `aigf playtest`（Playwright 冒烟）
 
 ---
+
+## 相关链接
+
+- [GitHub 同类调研](./github-landscape.md)
+- [架构说明](./architecture.md)
 
 ## 本项目仓库
 
 - Gitee：https://gitee.com/abdul-rehma/game
+- GitHub：https://github.com/abb-sss/game

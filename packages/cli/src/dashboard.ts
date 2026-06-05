@@ -10,6 +10,12 @@ import {
   getPendingApprovals,
 } from "@aigf/orchestrator";
 import { approveTask } from "./approve.js";
+import {
+  buildPreview,
+  getPreviewStatus,
+  startPreviewServer,
+  stopAllPreviewServers,
+} from "./preview-server.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DASHBOARD_DIST = path.join(__dirname, "../../dashboard/dist");
@@ -61,6 +67,20 @@ export async function startDashboard(port: number, defaultProject: string): Prom
     if (url.pathname === "/api/claim" && req.method === "POST") {
       return handleClaim(req, res, project);
     }
+    if (url.pathname === "/api/preview/status") {
+      return sendJson(res, await getPreviewStatus(path.resolve(project)));
+    }
+    if (url.pathname === "/api/preview/build" && req.method === "POST") {
+      const ok = await buildPreview(path.resolve(project));
+      return sendJson(res, {
+        ok,
+        ...(await getPreviewStatus(path.resolve(project))),
+      });
+    }
+    if (url.pathname === "/api/preview/start" && req.method === "POST") {
+      const status = await startPreviewServer(path.resolve(project));
+      return sendJson(res, status);
+    }
 
     let filePath = url.pathname === "/"
       ? path.join(DASHBOARD_DIST, "index.html")
@@ -83,9 +103,13 @@ export async function startDashboard(port: number, defaultProject: string): Prom
 
   server.listen(port, () => {
     const link = `http://localhost:${port}?project=${encodeURIComponent(defaultProject)}`;
-    console.log(`\n🎛️  AIGF 任务看板已启动（SSE 实时推送）`);
+    console.log(`\n🎛️  AIGF 任务看板已启动（SSE 实时推送 + Live Preview）`);
     console.log(`   ${link}\n`);
     setupWatcher(defaultProject);
+  });
+
+  server.on("close", () => {
+    stopAllPreviewServers();
   });
 }
 

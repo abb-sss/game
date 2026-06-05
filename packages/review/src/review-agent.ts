@@ -3,6 +3,7 @@ import {
   checkAssetFilesExist,
   checkManifestRefs,
   checkOutputPaths,
+  checkPlaytestReport,
   checkTaskContract,
   type CheckResult,
   type ReviewContext,
@@ -40,6 +41,7 @@ export class ReviewAgent {
     }
 
     layers.push(await checkAssetFilesExist(task, ctx));
+    layers.push(await checkPlaytestReport(task, ctx));
 
     return this.buildReport(task, layers.flat());
   }

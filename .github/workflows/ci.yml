@@ -22,3 +22,5 @@ jobs:
       - run: npm test
       - run: node templates/phaser-2d/scripts/generate-placeholders.mjs
       - run: npm run validate
+      - run: npx playwright install chromium --with-deps
+      - run: npm run playtest

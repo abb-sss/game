@@ -6,6 +6,7 @@ import {
   type TaskFailure,
   type TaskSpec,
 } from "@aigf/core";
+import { PlaytestReportSchema } from "@aigf/playtest";
 
 export interface CheckResult {
   name: string;
@@ -227,4 +228,68 @@ export async function checkAssetFilesExist(
   }
 
   return results;
+}
+
+/**
+ * L2：E2E 玩测报告检查（code 任务，报告存在时生效）。
+ */
+export async function checkPlaytestReport(
+  task: TaskSpec,
+  ctx: ReviewContext,
+): Promise<CheckResult[]> {
+  if (task.type !== "code") return [];
+
+  const reportPath = path.join(ctx.projectRoot, ".aigf", "playtest-report.json");
+
+  try {
+    const raw = await fs.readFile(reportPath, "utf-8");
+    const report = PlaytestReportSchema.parse(JSON.parse(raw));
+
+    if (report.passed) {
+      return [
+        {
+          name: "playtest_e2e",
+          passed: true,
+          message: `E2E 通过 ${report.total - report.failed}/${report.total}`,
+        },
+      ];
+    }
+
+    const failedCases = report.cases.filter((c) => !c.passed);
+    return [
+      {
+        name: "playtest_e2e",
+        passed: false,
+        message: `E2E 失败 ${report.failed}/${report.total}`,
+        failure: {
+          checkId: "playtest_e2e",
+          responsibleAgent: "code",
+          severity: "blocker",
+          message: failedCases.map((c) => c.id).join("; "),
+          retryHint:
+            "修复技能实现或资产加载后运行 aigf playtest，确保 game.spec 验收通过",
+          allowedPaths: task.allowedPaths,
+        },
+      },
+    ];
+  } catch {
+    if (process.env.AIGF_PLAYTEST_REQUIRED === "1") {
+      return [
+        {
+          name: "playtest_e2e",
+          passed: false,
+          message: "缺少 E2E 玩测报告",
+          failure: {
+            checkId: "playtest_missing",
+            responsibleAgent: "code",
+            severity: "blocker",
+            message: "未找到 .aigf/playtest-report.json",
+            retryHint: "运行 aigf playtest 生成 E2E 验收报告",
+            allowedPaths: task.allowedPaths,
+          },
+        },
+      ];
+    }
+    return [];
+  }
 }

@@ -12,7 +12,7 @@
   "dependencies": {
     "@aigf/core": "0.1.0",
     "@aigf/orchestrator": "0.1.0",
-    "@aigf/providers": "0.3.0"
+    "@aigf/providers": "0.6.0"
   },
   "devDependencies": {
     "typescript": "^5.8.3"

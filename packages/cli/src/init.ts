@@ -27,7 +27,10 @@ export async function initProject(targetDir: string): Promise<void> {
   console.log("  npm install");
   console.log("  node scripts/generate-placeholders.mjs");
   console.log("  npm run dev");
-  console.log("  aigf doc init          # 可选：生成 GDD 文档");
+  console.log("  aigf validate          # 校验 manifest / 资产 / Phaser lint");
+  console.log("  aigf doc init          # 生成 GDD / STATE 设计文档");
+  console.log("  aigf playtest          # Playwright 冒烟玩测");
+  console.log("  aigf deploy gh-pages   # 构建并输出静态站");
   console.log("  aigf hooks install     # 可选：提交前自动 validate");
 }
 

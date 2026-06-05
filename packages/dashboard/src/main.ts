@@ -53,6 +53,11 @@ const approvalsSection = document.getElementById("approvals-section")!;
 const approvalsList = document.getElementById("approvals-list")!;
 const reviewerInput = document.getElementById("reviewer-name") as HTMLInputElement;
 const approvalHistoryEl = document.getElementById("approval-history")!;
+const previewStatusEl = document.getElementById("preview-status")!;
+const previewFrame = document.getElementById("game-preview") as HTMLIFrameElement;
+const previewBuildBtn = document.getElementById("preview-build-btn")!;
+const previewStartBtn = document.getElementById("preview-start-btn")!;
+const previewReloadBtn = document.getElementById("preview-reload-btn")!;
 
 projectInput.value = new URLSearchParams(location.search).get("project") ?? "./templates/phaser-2d";
 reviewerInput.value = localStorage.getItem("aigf-reviewer") ?? "";
@@ -60,13 +65,24 @@ reviewerInput.addEventListener("change", () => {
   localStorage.setItem("aigf-reviewer", reviewerInput.value.trim());
 });
 
+projectInput.addEventListener("change", () => {
+  reconnectSse();
+  void refreshPreviewStatus();
+});
+
 let eventSource: EventSource | null = null;
 
 refreshBtn.addEventListener("click", () => {
   reconnectSse();
+  void refreshPreviewStatus();
 });
 
+previewBuildBtn.addEventListener("click", () => void buildPreview());
+previewStartBtn.addEventListener("click", () => void startPreview());
+previewReloadBtn.addEventListener("click", () => reloadPreviewFrame());
+
 reconnectSse();
+void refreshPreviewStatus();
 
 function reconnectSse(): void {
   if (eventSource) {
@@ -235,6 +251,74 @@ function renderApprovalHistory(history: ApprovalHistoryEntry[]): void {
   `,
     )
     .join("");
+}
+
+interface PreviewStatusPayload {
+  ready: boolean;
+  needBuild: boolean;
+  url: string | null;
+}
+
+async function refreshPreviewStatus(): Promise<void> {
+  const project = projectInput.value.trim();
+  try {
+    const res = await fetch(`/api/preview/status?project=${encodeURIComponent(project)}`);
+    const data = (await res.json()) as PreviewStatusPayload;
+    if (data.needBuild) {
+      previewStatusEl.textContent = "尚未构建 — 点击「构建预览」生成 dist/";
+      previewFrame.removeAttribute("src");
+      return;
+    }
+    if (data.ready && data.url) {
+      previewStatusEl.textContent = `预览运行中: ${data.url}`;
+      if (previewFrame.src !== data.url) {
+        previewFrame.src = data.url;
+      }
+      return;
+    }
+    previewStatusEl.textContent = "已构建，点击「启动预览」在 iframe 中试玩";
+  } catch {
+    previewStatusEl.textContent = "无法获取预览状态";
+  }
+}
+
+async function buildPreview(): Promise<void> {
+  const project = projectInput.value.trim();
+  previewStatusEl.textContent = "构建中…";
+  const res = await fetch(`/api/preview/build?project=${encodeURIComponent(project)}`, {
+    method: "POST",
+  });
+  const data = (await res.json()) as PreviewStatusPayload & { ok?: boolean };
+  if (!data.ok) {
+    previewStatusEl.textContent = "构建失败，请检查终端日志";
+    return;
+  }
+  await refreshPreviewStatus();
+}
+
+async function startPreview(): Promise<void> {
+  const project = projectInput.value.trim();
+  previewStatusEl.textContent = "启动预览服务…";
+  const res = await fetch(`/api/preview/start?project=${encodeURIComponent(project)}`, {
+    method: "POST",
+  });
+  const data = (await res.json()) as PreviewStatusPayload;
+  if (data.ready && data.url) {
+    previewStatusEl.textContent = `预览运行中: ${data.url}`;
+    previewFrame.src = data.url;
+    return;
+  }
+  if (data.needBuild) {
+    previewStatusEl.textContent = "请先构建预览";
+    return;
+  }
+  previewStatusEl.textContent = "预览启动失败";
+}
+
+function reloadPreviewFrame(): void {
+  if (previewFrame.src) {
+    previewFrame.src = previewFrame.src;
+  }
 }
 
 function formatTime(iso: string): string {

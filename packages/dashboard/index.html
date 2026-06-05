@@ -24,6 +24,21 @@
         <button id="refresh-btn">重连</button>
         <span id="live-indicator" class="live-badge">● 实时</span>
       </section>
+      <section class="card preview-section">
+        <h2 class="section-title">🎮 Live Preview</h2>
+        <p id="preview-status" class="preview-status">检测预览状态…</p>
+        <div class="preview-actions">
+          <button id="preview-build-btn" type="button">构建预览</button>
+          <button id="preview-start-btn" type="button" class="btn-secondary">启动预览</button>
+          <button id="preview-reload-btn" type="button" class="btn-secondary">刷新 iframe</button>
+        </div>
+        <iframe
+          id="game-preview"
+          class="game-preview"
+          title="游戏预览"
+          sandbox="allow-scripts allow-same-origin"
+        ></iframe>
+      </section>
       <section id="summary" class="card"></section>
       <section id="task-list" class="task-grid"></section>
       <section id="approvals-section" class="card" hidden>

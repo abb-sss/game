@@ -10,12 +10,16 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint src/",
-    "validate": "node ../../packages/cli/dist/index.js validate ."
+    "validate": "node ../../packages/cli/dist/index.js validate .",
+    "playtest": "node ../../packages/cli/dist/index.js playtest --project .",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "phaser": "^3.88.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "yaml": "^2.8.0",
     "eslint": "^9.28.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.33.0",

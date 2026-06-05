@@ -9,6 +9,8 @@ import { approveTask, listApprovals } from "./approve.js";
 import { showProjectStatus } from "./status.js";
 import { initDocs } from "./doc.js";
 import { installHooks, uninstallHooks } from "./hooks.js";
+import { runPlaytest } from "./playtest.js";
+import { deployGhPages, deployStatic } from "./deploy.js";
 
 function parseArgs(argv: string[]): {
   command: string;
@@ -147,6 +149,42 @@ async function main(): Promise<void> {
       break;
     }
 
+    case "playtest": {
+      const project = flags.project
+        ? path.resolve(String(flags.project))
+        : findProjectRoot();
+      const result = await runPlaytest({
+        projectRoot: project,
+        skipBuild: flags["skip-build"] === true,
+        skipBrowserInstall: flags["skip-browser-install"] === true,
+      });
+      process.exit(result.ok ? 0 : 1);
+      break;
+    }
+
+    case "deploy": {
+      const sub = positional[0] ?? "gh-pages";
+      const project = flags.project
+        ? path.resolve(String(flags.project))
+        : findProjectRoot();
+
+      let ok = false;
+      if (sub === "gh-pages") {
+        ok = await deployGhPages({
+          projectRoot: project,
+          outDir: flags.out ? path.resolve(String(flags.out)) : undefined,
+          push: flags.push === true,
+        });
+      } else if (sub === "static") {
+        ok = await deployStatic(project);
+      } else {
+        console.error(`未知子命令: deploy ${sub}（支持: gh-pages / static）`);
+        process.exit(1);
+      }
+      process.exit(ok ? 0 : 1);
+      break;
+    }
+
     case "help":
     default:
       console.log(`
@@ -159,7 +197,10 @@ AIGF CLI — AI Game Framework 命令行工具
   aigf status [选项]            查看项目任务/审批/事件状态
   aigf dashboard [选项]         启动任务看板 Web UI
   aigf validate [project-path]  验证 game.spec、manifest、资产完整性
-  aigf doc init [选项]          从模板生成 design/GDD 等文档
+  aigf doc init [选项]          从模板生成 design/GDD、STATE 等文档
+  aigf playtest [选项]          E2E 验收（game.spec 驱动，写入玩测报告）
+  aigf deploy gh-pages [选项]   构建并输出 GitHub Pages 静态站
+  aigf deploy static [选项]     仅构建游戏 dist
   aigf hooks install [选项]     安装 Git pre-commit 验证钩子
   aigf hooks uninstall          移除 AIGF pre-commit 钩子
   aigf help                     显示帮助
@@ -186,7 +227,18 @@ dashboard 选项:
   aigf dashboard --project ./templates/phaser-2d
   aigf validate --strict
   aigf doc init --project ./my-game
+  aigf playtest --project ./templates/phaser-2d
   aigf hooks install
+
+playtest 选项:
+  --project <path>           游戏项目目录
+  --skip-build               跳过 npm run build
+  --skip-browser-install     跳过 Chromium 自动安装
+
+deploy 选项:
+  --project <path>   游戏项目目录
+  --out <path>       gh-pages 输出目录（默认 dist/gh-pages）
+  --push             构建后执行 npx gh-pages -d
 
 环境变量（.env）:
   AIGF_LLM_API_KEY      LLM API 密钥（编排/编程/智能规划）
