@@ -1,0 +1,31 @@
+version: "1.0"
+title: "AIGF Demo"
+genre: "action"
+description: "AI Game Framework 演示项目 — 最小可玩 2D 场景"
+rules:
+  winCondition: "击败所有敌人"
+  loseCondition: "玩家生命值归零"
+entities:
+  - id: player
+    name: "法师"
+    components:
+      - Transform
+      - Sprite
+      - Health
+      - SkillBar
+skills:
+  - id: fireball
+    name: "火球术"
+    cooldownMs: 2000
+    damageType: fire
+    assetIds:
+      - mage_idle
+      - sfx_fire_cast
+  - id: ice_spike
+    name: "冰锥术"
+    cooldownMs: 2000
+    damageType: ice
+    assetIds:
+      - icon_ice_spike
+      - sfx_ice_spike_cast
+      - anim_ice_spike_cast

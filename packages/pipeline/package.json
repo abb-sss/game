@@ -1,0 +1,31 @@
+{
+  "name": "@aigf/pipeline",
+  "version": "0.2.0",
+  "description": "AIGF 资产管线 — 视频抽帧、精灵表合并、动画 spec 生成",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "lint": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@aigf/core": "0.1.0",
+    "pngjs": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "@types/pngjs": "^6.0.5",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.3"
+  }
+}

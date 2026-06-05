@@ -1,0 +1,35 @@
+{
+  "name": "@aigf/cli",
+  "version": "0.1.0",
+  "description": "AIGF 命令行工具 — validate、任务状态查看",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "aigf": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "lint": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@aigf/agent-audio": "0.1.0",
+    "@aigf/agent-code": "0.1.0",
+    "@aigf/agent-image": "0.1.0",
+    "@aigf/agent-video": "0.1.0",
+    "@aigf/core": "0.1.0",
+    "@aigf/llm": "0.2.0",
+    "@aigf/orchestrator": "0.1.0",
+    "@aigf/agent-video": "0.1.0",
+    "@aigf/review": "0.1.0",
+    "yaml": "^2.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.3"
+  }
+}

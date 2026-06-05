@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIGF 任务看板</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>AIGF 任务看板</h1>
+      <p class="subtitle">AI Game Framework — Agent 工作流实时监控</p>
+    </header>
+    <main>
+      <section class="controls">
+        <label>
+          项目路径
+          <input id="project-path" type="text" placeholder="./templates/phaser-2d" />
+        </label>
+        <label>
+          审批人
+          <input id="reviewer-name" type="text" placeholder="你的名字" />
+        </label>
+        <button id="refresh-btn">重连</button>
+        <span id="live-indicator" class="live-badge">● 实时</span>
+      </section>
+      <section id="summary" class="card"></section>
+      <section id="task-list" class="task-grid"></section>
+      <section id="approvals-section" class="card" hidden>
+        <h2 class="section-title">⏸️ 待人工审批</h2>
+        <div id="approvals-list"></div>
+      </section>
+      <section class="card">
+        <h2 class="section-title">审批记录</h2>
+        <div id="approval-history" class="events-log"></div>
+      </section>
+      <section class="card">
+        <h2 class="section-title">事件日志</h2>
+        <div id="events-log" class="events-log"></div>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,57 @@
+{
+  "name": "aigf",
+  "version": "0.8.0",
+  "private": false,
+  "description": "AIGF — 开源多 Agent 驱动 2D 游戏开发框架。Phaser 3 + TypeScript，含 AI 编排、生图/视频/音频/编程 Agent、验收回炉、Runway/Kling 资产管线与 CLI 工具链。",
+  "license": "MIT",
+  "author": "阿卜杜热合曼的 <pfr314@qq.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/abdul-rehma/game.git",
+    "directory": "."
+  },
+  "homepage": "https://gitee.com/abdul-rehma/game",
+  "bugs": {
+    "url": "https://github.com/abb-sss/game/issues"
+  },
+  "keywords": [
+    "ai",
+    "game-development",
+    "phaser",
+    "phaser3",
+    "multi-agent",
+    "agent-orchestration",
+    "2d",
+    "typescript",
+    "vite",
+    "image-to-video",
+    "game-framework",
+    "open-source",
+    "aigf"
+  ],
+  "workspaces": [
+    "packages/*",
+    "agents/*",
+    "templates/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @aigf/core && npm run build -w @aigf/llm && npm run build -w @aigf/providers && npm run build -w @aigf/pipeline && npm run build -w @aigf/orchestrator && npm run build -w @aigf/review && npm run build -w @aigf/agent-code && npm run build -w @aigf/agent-image && npm run build -w @aigf/agent-video && npm run build -w @aigf/agent-audio && npm run build -w @aigf/cli && npm run build -w @aigf/dashboard",
+    "test": "npm run test -w @aigf/core && npm run test -w @aigf/llm && npm run test -w @aigf/providers && npm run test -w @aigf/orchestrator && npm run test -w @aigf/review && npm run test -w @aigf/pipeline && npm run test -w @aigf/cli",
+    "run:demo:full": "npm run build && node packages/cli/dist/index.js run \"添加冰锥术技能动画\" --project ./templates/phaser-2d --dry-run",
+    "lint": "npm run lint --workspaces --if-present",
+    "validate": "npm run build && node packages/cli/dist/index.js validate",
+    "dev:demo": "npm run dev -w @aigf/template-phaser-2d",
+    "setup:demo": "node templates/phaser-2d/scripts/generate-placeholders.mjs",
+    "example": "npm run build && node examples/basic-flow.mjs",
+    "run:demo": "npm run build && node packages/cli/dist/index.js run \"添加冰锥术\" --project ./templates/phaser-2d --dry-run",
+    "dashboard": "npm run build && node packages/cli/dist/index.js dashboard --project ./templates/phaser-2d"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.3"
+  }
+}

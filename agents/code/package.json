@@ -1,0 +1,21 @@
+{
+  "name": "@aigf/agent-code",
+  "version": "0.1.0",
+  "description": "编程 Agent 适配器 — Phaser 3 + TypeScript",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@aigf/core": "0.1.0",
+    "@aigf/llm": "0.2.0",
+    "@aigf/orchestrator": "0.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

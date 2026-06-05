@@ -1,0 +1,29 @@
+{
+  "name": "@aigf/providers",
+  "version": "0.6.0",
+  "description": "AIGF 多模态 API 提供商 — 生图、音频，OpenAI 兼容",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "lint": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@aigf/llm": "0.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.3"
+  }
+}

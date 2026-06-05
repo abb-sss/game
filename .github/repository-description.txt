@@ -1,0 +1,3 @@
+Open-source multi-agent AI framework for 2D games — Phaser 3, TypeScript, orchestration, review-rework, asset pipeline (MIT)
+
+Suggested topics: ai, phaser, multi-agent, game-development, typescript, 2d-games

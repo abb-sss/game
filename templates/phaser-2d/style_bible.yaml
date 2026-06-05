@@ -1,0 +1,16 @@
+version: "1.0"
+visual: "pixel art, 16-color palette, side-view 2D, crisp pixels, no anti-aliasing"
+audio: "chiptune with subtle orchestral layers, tempo 120bpm"
+tone: "dark fantasy, adventurous, not cute"
+naming: "snake_case, prefix by type (sfx_, bgm_, icon_)"
+palette:
+  - "#2d1b69"
+  - "#114b5f"
+  - "#f45b69"
+  - "#ffc857"
+referenceImages: []
+negativePrompts:
+  - "blurry"
+  - "realistic"
+  - "3d render"
+  - "watermark"

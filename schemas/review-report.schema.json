@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aigf.dev/schemas/review-report.schema.json",
+  "title": "ReviewReport",
+  "description": "验收 Agent 输出的结构化报告，驱动第一时间回炉",
+  "type": "object",
+  "required": [
+    "taskId",
+    "passed",
+    "retryRound",
+    "maxRetries",
+    "failures",
+    "routing",
+    "action",
+    "checks"
+  ],
+  "properties": {
+    "taskId": { "type": "string" },
+    "passed": { "type": "boolean" },
+    "retryRound": { "type": "integer", "minimum": 0 },
+    "maxRetries": { "type": "integer", "minimum": 1 },
+    "failures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "checkId",
+          "responsibleAgent",
+          "severity",
+          "message",
+          "retryHint"
+        ],
+        "properties": {
+          "checkId": { "type": "string" },
+          "responsibleAgent": {
+            "enum": ["orchestrator", "code", "image", "video", "audio", "review"]
+          },
+          "severity": { "enum": ["blocker", "major", "minor"] },
+          "message": { "type": "string" },
+          "retryHint": { "type": "string" },
+          "allowedPaths": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "dependsOnManifest": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "referenceTaskId": { "type": "string" }
+        }
+      }
+    },
+    "routing": {
+      "type": "object",
+      "required": ["primary", "secondary", "strategy"],
+      "properties": {
+        "primary": { "type": "string" },
+        "secondary": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "strategy": {
+          "enum": ["blockers_first", "parallel", "sequential"]
+        }
+      }
+    },
+    "action": {
+      "enum": ["retry", "escalate_human", "fallback", "approve"]
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "passed"],
+        "properties": {
+          "name": { "type": "string" },
+          "passed": { "type": "boolean" },
+          "message": { "type": "string" },
+          "score": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    }
+  }
+}

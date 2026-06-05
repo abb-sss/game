@@ -1,0 +1,29 @@
+{
+  "name": "@aigf/orchestrator",
+  "version": "0.1.0",
+  "description": "AIGF 编排 Agent — 派单、验收回炉路由、依赖图管理",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "lint": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@aigf/core": "0.1.0",
+    "@aigf/llm": "0.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.3"
+  }
+}

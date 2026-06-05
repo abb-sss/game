@@ -1,0 +1,21 @@
+{
+  "name": "@aigf/agent-video",
+  "version": "0.1.0",
+  "description": "视频/动画 Agent 适配器",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@aigf/core": "0.1.0",
+    "@aigf/orchestrator": "0.1.0",
+    "@aigf/pipeline": "0.2.0",
+    "@aigf/providers": "0.3.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

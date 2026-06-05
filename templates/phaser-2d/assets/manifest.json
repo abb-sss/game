@@ -1,0 +1,66 @@
+{
+  "version": "1.0",
+  "assets": [
+    {
+      "id": "mage_idle",
+      "type": "sprite",
+      "path": "assets/sprites/mage_idle.png",
+      "tags": [
+        "player",
+        "character"
+      ],
+      "meta": {
+        "width": 32,
+        "height": 32
+      },
+      "placeholder": true
+    },
+    {
+      "id": "sfx_fire_cast",
+      "type": "audio",
+      "path": "assets/audio/sfx_fire_cast.ogg",
+      "tags": [
+        "sfx",
+        "skill",
+        "fire"
+      ],
+      "meta": {
+        "duration_ms": 500
+      },
+      "placeholder": true
+    },
+    {
+      "id": "icon_ice_spike",
+      "type": "sprite",
+      "path": "assets/sprites/icon_ice_spike.png",
+      "tags": [
+        "generated"
+      ],
+      "placeholder": true
+    },
+    {
+      "id": "sfx_ice_spike_cast",
+      "type": "audio",
+      "path": "assets/audio/sfx_ice_spike_cast.ogg",
+      "tags": [
+        "generated"
+      ],
+      "placeholder": true
+    },
+    {
+      "id": "anim_ice_spike_cast",
+      "type": "spritesheet",
+      "path": "assets/anims/anim_ice_spike_cast.png",
+      "tags": [
+        "animation",
+        "generated"
+      ],
+      "meta": {
+        "frameWidth": 32,
+        "frameHeight": 32,
+        "frameCount": 8
+      },
+      "placeholder": true
+    }
+  ]
+}

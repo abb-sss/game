@@ -1,0 +1,10 @@
+{
+  "id": "anim_ice_spike_cast",
+  "sourceVideo": "generated://anim_ice_spike_cast",
+  "frameCount": 8,
+  "frameWidth": 32,
+  "frameHeight": 32,
+  "spritesheet": "assets/anims/anim_ice_spike_cast.png",
+  "phaserKey": "anim_ice_spike_cast",
+  "fps": 12
+}

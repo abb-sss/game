@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" role="img" aria-label="AIGF">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffc857"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="8" width="64" height="64" rx="14" fill="#1a1a2e" stroke="url(#g)" stroke-width="3"/>
+  <rect x="18" y="22" width="12" height="12" rx="2" fill="#ffc857"/>
+  <rect x="34" y="22" width="12" height="12" rx="2" fill="#60a5fa"/>
+  <rect x="18" y="38" width="12" height="12" rx="2" fill="#4ade80"/>
+  <rect x="34" y="38" width="12" height="12" rx="2" fill="#f87171"/>
+  <text x="88" y="38" font-family="Segoe UI, system-ui, sans-serif" font-size="28" font-weight="700" fill="#e8e8f0">AIGF</text>
+  <text x="88" y="58" font-family="Segoe UI, system-ui, sans-serif" font-size="13" fill="#8888aa">AI Game Framework</text>
+</svg>

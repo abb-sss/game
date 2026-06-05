@@ -1,0 +1,17 @@
+{
+  "name": "@aigf/dashboard",
+  "version": "0.3.0",
+  "private": true,
+  "description": "AIGF 任务看板 Web UI",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  }
+}

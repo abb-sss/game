@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aigf.dev/schemas/task-spec.schema.json",
+  "title": "TaskSpec",
+  "description": "编排 Agent 派发给专家 Agent 的任务单",
+  "type": "object",
+  "required": [
+    "taskId",
+    "type",
+    "agent",
+    "status",
+    "retryRound",
+    "maxRetries",
+    "allowedPaths",
+    "forbiddenPaths",
+    "outputContract",
+    "context",
+    "dependsOn",
+    "blocks",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "taskId": { "type": "string", "minLength": 1 },
+    "type": {
+      "enum": ["code", "image", "video", "audio", "review"]
+    },
+    "agent": {
+      "enum": ["orchestrator", "code", "image", "video", "audio", "review"]
+    },
+    "status": {
+      "enum": [
+        "pending",
+        "dispatched",
+        "submitted",
+        "reviewing",
+        "failed",
+        "retrying",
+        "passed",
+        "merged",
+        "blocked_by_upstream",
+        "escalated"
+      ]
+    },
+    "parentTaskId": { "type": "string" },
+    "retryRound": { "type": "integer", "minimum": 0 },
+    "maxRetries": { "type": "integer", "minimum": 1 },
+    "allowedPaths": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "forbiddenPaths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "outputContract": {
+      "type": "object",
+      "required": ["schema", "mustPass"],
+      "properties": {
+        "schema": { "type": "string" },
+        "mustPass": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "required": ["manifestIds", "instruction"],
+      "properties": {
+        "gameSpecRef": { "type": "string" },
+        "styleBibleRef": { "type": "string" },
+        "manifestIds": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "apiSummary": { "type": "string" },
+        "instruction": { "type": "string", "minLength": 1 }
+      }
+    },
+    "reworkContext": {
+      "type": "object",
+      "properties": {
+        "failureSummary": { "type": "string" },
+        "retryHint": { "type": "string" },
+        "preserve": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "artifacts": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "dependsOn": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "blocks": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}
